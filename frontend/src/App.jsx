@@ -1,33 +1,39 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import Navbar from './components/NavBar.jsx'
 
-function App() {
-  const [count, setCount] = useState(0)
-
+const App = () => {
+  fetch("/api/products")
+  .then(response => response.json())
+  .then(data => {
+    document.getElementById("content").innerHTML = "";
+    data.data.forEach(product => {
+      document.getElementById("content").innerHTML += `
+        <tr className='border-collapse border-2 border-solid border-black'>
+          <th className='border-collapse border-2 border-solid border-black px-30 py-5'>${product.name}</th>
+          <th className='border-collapse border-2 border-solid border-black px-20 py-5'>${product.price}</th>
+          <th className='border-collapse border-2 border-solid border-black px-20 py-5'>${product.image}</th>
+        </tr>
+      `;
+    });
+  })
+  .catch(error => console.error(error));
+  
   return (
     <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+      <Navbar/>
+      <div className="w-full h-lvh flex items-center justify-center">
+        <table className='border-collapse border-2 border-solid border-black'>
+          <thead>
+            <tr className='border-collapse border-2 border-solid border-black'>
+              <th className='border-collapse border-2 border-solid border-black px-30 py-5'>Name</th>
+              <th className='border-collapse border-2 border-solid border-black px-20 py-5'>Price</th>
+              <th className='border-collapse border-2 border-solid border-black px-20 py-5'>Image</th>
+            </tr>
+          </thead>
+          <tbody id='content'>
+            
+          </tbody>
+        </table>
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
     </>
   )
 }
